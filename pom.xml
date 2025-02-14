@@ -51,7 +51,27 @@
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
 		</dependency>
-
+		<!-- websocket -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+			<version>3.4.2</version>
+		</dependency>
+		<!-- websocket -->
+		<!-- transactional -->
+		<dependency> 
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>7.0.0-M1</version>
+		</dependency>
+		<!-- transactional -->
+		<!-- persistence -->
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>javax.persistence-api</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<!-- persistence -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>

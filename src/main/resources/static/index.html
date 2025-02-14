@@ -7,14 +7,13 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
             background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;                        
         }
         .container {
             width: 80%;
-            margin: auto;
-            overflow: hidden;
+            margin: auto;            
         }
         header {
             background: #333;
@@ -76,6 +75,22 @@
             padding: 10px 0;
             margin-top: 20px;
         }
+        .canvas-container {
+            width: 100%;
+            height: 400px; /* Ajusta la altura del canvas */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ddd; /* Para que se vea bien */
+            position: relative;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: relative; /* Ya no es absoluto */
+        }
     </style>
 </head>
 <body>
@@ -86,7 +101,7 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="/LandingPage">Home</a></li>
                     <li><a href="#">About</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
@@ -117,8 +132,19 @@
             <li>Skill 2</li>
             <li>Skill 3</li>
         </ul>
-    </div>
-
+    </div> 
+    <canvas id="backgroundCanvas" width="100vw" ></canvas>
+    <canvas id="objectsCanvas"></canvas>
+    <canvas id="charactersCanvas"></canvas>
+    <canvas id="uiCanvas"></canvas>
+    <script type="module" src="js/canvasManager.js"></script>
+    <script type="module" src="js/game.js"></script>   
+    <!-- <script>
+        window.onload = function() {
+            window.location.href = '/LandingPage';
+        }
+    </script> -->
+    
     <footer>
         <p>Copyright &copy; 2023 Your Name</p>
     </footer>
