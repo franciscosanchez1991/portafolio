@@ -4,149 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Curriculum Vitae</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;                        
-        }
-        .container {
-            width: 80%;
-            margin: auto;            
-        }
-        header {
-            background: #333;
-            color: #fff;
-            padding-top: 30px;
-            min-height: 70px;
-            border-bottom: #77aaff 3px solid;
-        }
-        header a {
-            color: #fff;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-size: 16px;
-        }
-        header ul {
-            padding: 0;
-            list-style: none;
-        }
-        header li {
-            float: left;
-            display: inline;
-            padding: 0 20px 0 20px;
-        }
-        header #branding {
-            float: left;
-        }
-        header #branding h1 {
-            margin: 0;
-        }
-        header nav {
-            float: right;
-            margin-top: 10px;
-        }
-        .main-content {
-            padding: 20px;
-            background: #fff;
-            margin-top: 20px;
-        }
-        .main-content h2 {
-            color: #333;
-        }
-        .main-content p {
-            line-height: 1.6em;
-        }
-        .main-content ul {
-            list-style: none;
-            padding: 0;
-        }
-        .main-content ul li {
-            background: #f4f4f4;
-            margin: 5px 0;
-            padding: 10px;
-            border: #ccc 1px solid;
-        }
-        footer {
-            background: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-            margin-top: 20px;
-        }
-        .canvas-container {
-            width: 100%;
-            height: 400px; /* Ajusta la altura del canvas */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #ddd; /* Para que se vea bien */
-            position: relative;
-        }
-
-        canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-            position: relative; /* Ya no es absoluto */
-        }
-    </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div id="branding">
-                <h1>Your Name</h1>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="/LandingPage">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <div class="container main-content">
-        <h2>About Me</h2>
-        <p>Brief introduction about yourself.</p>
-
-        <h2>Experience</h2>
-        <ul>
-            <li>Job Title at Company - Duration</li>
-            <li>Job Title at Company - Duration</li>
-            <li>Job Title at Company - Duration</li>
-        </ul>
-
-        <h2>Education</h2>
-        <ul>
-            <li>Degree at Institution - Year</li>
-            <li>Degree at Institution - Year</li>
-        </ul>
-
-        <h2>Skills</h2>
-        <ul>
-            <li>Skill 1</li>
-            <li>Skill 2</li>
-            <li>Skill 3</li>
-        </ul>
-    </div> 
-    <canvas id="backgroundCanvas" width="100vw" ></canvas>
+    <style>
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #backgroundCanvas { z-index: 1; }
+        #uiCanvas { z-index: 2; }
+        #objectsCanvas { z-index: 3; }
+        #charactersCanvas { z-index: 4; }
+    </style>
+    <canvas id="backgroundCanvas" ></canvas>
     <canvas id="objectsCanvas"></canvas>
     <canvas id="charactersCanvas"></canvas>
     <canvas id="uiCanvas"></canvas>
     <script type="module" src="js/canvasManager.js"></script>
-    <script type="module" src="js/game.js"></script>   
-    <!-- <script>
-        window.onload = function() {
-            window.location.href = '/LandingPage';
-        }
-    </script> -->
-    
-    <footer>
-        <p>Copyright &copy; 2023 Your Name</p>
-    </footer>
+    <script type="module" src="js/game.js"></script>  
+    <script type="module" src="js/player.js"></script> 
+
 </body>
 </html>

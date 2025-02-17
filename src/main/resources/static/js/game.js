@@ -1,39 +1,25 @@
 import canvasManager from "./canvasManager.js";
+import {resources} from "./resources.js";
+import { Sprite } from "./sprite.js";
+import { Vector2 } from "./Vector2.js";
+const uiCtx = canvasManager.ctx.ui; // Obtener el contexto del canvas de fondo
+const backgroundCtx = canvasManager.ctx.background; // Obtener el contexto del canvas de fondo
 
-const { background, objects, players } = canvasManager.ctx;
-// cargar personaje
-const player = new Image();
-const imagenes = {
-    fondo: new Image(),
-    objeto1: new Image(),
-    objeto2: new Image(),
-    objeto3: new Image()
+const background = new Sprite({
+    resource: resources.images.fondo,
+    frameSize: new Vector2(500, 500)
+})
+
+const draw = () => {
+    background.drawImage(backgroundCtx, 0, 0);
 };
-imagenes.fondo.src = "sprites/suelo.png";
-// Esperar a que todas las imágenes se carguen antes de dibujarlas
-let cargadas = 0;
-const total = Object.keys(imagenes).length;
-Object.values(imagenes).forEach(img => {
-    img.onload = () => {
-        cargadas++;
-        if (cargadas === total) {
-            dibujarImagenes();
-        }
-    };
-});
-function dibujarImagenes() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas
-    ctx.background.imageSmoothingEnabled = false;
-    // Dibujar en orden: el fondo primero, luego los objetos encima
-    ctx.drawImage(imagenes.fondo, 0, 0, canvas.width, canvas.height); // Imagen de fondo
-    ctx.drawImage(imagenes.objeto1, 50, 100, 100, 100); // Objeto 1 (Ej: caja)
-    ctx.drawImage(imagenes.objeto2, 70, 120, 80, 80);  // Objeto 2 (Ej: personaje)
-    ctx.drawImage(imagenes.objeto3, 85, 90, 50, 50);   // Objeto 3 (Ej: sombrero)
-}
 
 function gameLoop() {
-    
-    requestAnimationFrame(gameLoop);
+    draw();
+    requestAnimationFrame(gameLoop); // Call the game loop recursively
 }
 
-gameLoop();
+// Start the game loop once resources are loaded
+Object.values(resources.images).every(img => img.isLoaded) ? 
+    gameLoop() : 
+    setTimeout(() => gameLoop(), 100);
