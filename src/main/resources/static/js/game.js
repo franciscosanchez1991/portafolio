@@ -8,10 +8,16 @@ const backgroundCtx = canvasManager.ctx.background; // Obtener el contexto del c
 const background = new Sprite({
     resource: resources.images.fondo,
     frameSize: new Vector2(500, 500)
+});
+const money = new Sprite({
+    resource: resources.images.moneda,
+    frameSize: new Vector2(500, 500)
 })
+
 
 const draw = () => {
     background.drawImage(backgroundCtx, 0, 0);
+    money.drawImage(uiCtx, 0, 0);
 };
 
 function gameLoop() {
