@@ -4,8 +4,9 @@ class Resources {
             fondo: "sprites/suelo3_320x180.png",
             shelf: "sprites/shelf.png",
             header: "sprites/header.png",
-            moneda: "sprites/moneda.png",
+            moneda: "sprites/moneda8.png",
             character: "sprites/hero-sheet.png",
+            wall: "sprites/pared.png",
         };
         this.images = {};
         this.loadedImages = 0;
