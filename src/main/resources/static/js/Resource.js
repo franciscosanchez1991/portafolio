@@ -1,11 +1,11 @@
 class Resources {
     constructor() {
         this.toLoad = {
-            fondo: "sprites/suelo2_500.png",
+            fondo: "sprites/suelo3_320x180.png",
             shelf: "sprites/shelf.png",
             header: "sprites/header.png",
             moneda: "sprites/moneda.png",
-            character: "sprites/referencia1.png",
+            character: "sprites/hero-sheet.png",
         };
         this.images = {};
         this.loadedImages = 0;

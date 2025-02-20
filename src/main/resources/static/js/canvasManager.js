@@ -17,14 +17,13 @@ class CanvasManager {
     }
     setupCanvas() {
         this.resizeCanvas();
-        //this.drawBackground();
     }    
     resizeCanvas() {        
         Object.values(this.canvases).forEach(canvas => { // recorro los canvas
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         });    
-        //this.drawBackground(); // Redibujar fondo solo una vez
+        
     }
 }
 
