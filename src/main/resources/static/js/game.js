@@ -117,7 +117,12 @@ const draw = () => {
     wallsSprite.drawImage(ctx, 0, 16); 
     shelf.drawImage(ctx, 97, 97);    
     Header.drawImage(ctx, 0, 0);
-    money.drawImage(ctx, 10, 10);
+    money.drawImage(ctx, 5, 4);
+
+    // text
+    ctx.font = "10px Arial";    
+    ctx.fillText("Hello World",13,11);
+
     // Draw entities
     const characterOffset = new Vector2(-8,-21);
     const characterX = character.position.x + characterOffset.x;
