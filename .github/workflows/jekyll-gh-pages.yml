@@ -16,7 +16,7 @@ jobs:
       - uses: actions/jekyll-build-pages@v1
         with:
           destination: "./output"
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: "./output"
 
@@ -28,7 +28,7 @@ jobs:
         with:
           java-version: 11
       - run: ./mvnw clean package
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: spring-boot-app
           path: target/*.jar
