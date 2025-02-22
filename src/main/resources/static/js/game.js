@@ -115,7 +115,11 @@ const tryMove = () => {
 const draw = () => {    
     background.drawImage(ctx, 0, 0);   
     wallsSprite.drawImage(ctx, 0, 16); 
+    shelf.drawImage(ctx, 155, 97);  // x,y    
+    shelf.drawImage(ctx, 126, 97);  // x,y    
     shelf.drawImage(ctx, 97, 97);    
+    shelf.drawImage(ctx, 68, 97);  // x,y    
+    shelf.drawImage(ctx, 39, 97);  // x,y    
     Header.drawImage(ctx, 0, 0);
     money.drawImage(ctx, 5, 4);
 
@@ -124,7 +128,7 @@ const draw = () => {
     ctx.fillText("Hello World",13,11);
 
     // Draw entities
-    const characterOffset = new Vector2(-8,-21);
+    const characterOffset = new Vector2(200,-21);
     const characterX = character.position.x + characterOffset.x;
     const characterY = character.position.y +1 + characterOffset.y;
     character.drawImage(ctx, characterX, characterY);
