@@ -45,3 +45,14 @@ export const STAND_DOWN = standingFrames(1);
 export const STAND_LEFT = standingFrames(10);
 export const STAND_RIGHT = standingFrames(4);
 export const STAND_UP = standingFrames(7);
+
+export const PICK_UP_DOWN = {
+    duration: 400,
+    frames: [
+      {
+        time: 0,
+        frame: 12
+      }
+    ]
+  }
+  
