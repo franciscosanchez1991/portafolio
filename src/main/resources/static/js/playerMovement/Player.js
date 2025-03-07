@@ -141,7 +141,7 @@ export class Character extends GameObject{
     }
 
     tryEmitPosition() {
-        if (this.lastX === this.position.x && this.lastY === this.position.y) {
+        if (this.lastX === this.position.x && this.lastY === this.position.y) { // in case the character didint move
           return;
         }
         this.lastX = this.position.x;

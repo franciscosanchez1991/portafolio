@@ -14,7 +14,7 @@ export class Sprite extends GameObject{
         animations,
       }) {
       super({
-        name
+        
       });
       this.resource = resource;
       this.frameSize = frameSize ?? new Vector2(16,16);
@@ -51,7 +51,12 @@ export class Sprite extends GameObject{
 
     drawImage(ctx,x,y){
         if (!this.resource.isLoaded) {
-            console.warn('Resource not loaded yet');
+            //console.warn('Resource not loaded yet'+ this.resource);
+            console.log('Resource:', this.resource);
+            console.log('Resource structure:', {
+                hasImage: !!this.resource.image,
+                hasIsLoaded: 'isLoaded' in this.resource
+            });
             return;
         }
 
