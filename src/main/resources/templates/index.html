@@ -1,29 +1,94 @@
-<!-- filepath: src/main/resources/static/index.html -->
+.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to My Portfolio</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Francisco Sanchez - Portfolio</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>Welcome to My Portfolio</h1>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/game">Play Game</a></li>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">YN</div>
+            <ul class="nav-links">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/game">Interactive Demo</a></li>
                 <li><a href="/download/CV-computer_engineer.pdf">Download CV</a></li>
             </ul>
-        </nav>
-    </header>
-    <main>
+        </div>
+    </nav>
+
+    <main class="container">
         <section class="hero">
-            <h2>Portfolio Presentation</h2>
-            <p>Welcome to my interactive portfolio!</p>
-            <a href="/game" class="cta-button">Play the Game</a>
+            <div class="profile-section">
+                <div class="profile-image">
+                    <!-- Add your profile image here -->
+                    <img src="/images/myphoto.png" alt="hi there">
+                </div>
+                <div class="profile-info">
+                    <h1>Francisco Sanchez</h1>
+                    <h2>Computer Engineer</h2>
+                    <p class="tagline">Full Stack Developer | Game Developer</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about">
+            <h2>About Me</h2>
+            <p>Computer Engineer with a passion for creating interactive experiences and solving complex problems.</p>
+        </section>
+
+        <section class="skills">
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Languages</h3>
+                    <ul>
+                        <li>Java</li>
+                        <li>JavaScript</li>
+                        <li>Python</li>
+                        <li>C++</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Technologies</h3>
+                    <ul>
+                        <li>Spring Boot</li>
+                        <li>React</li>
+                        <li>Node.js</li>
+                        <li>Game Development</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="projects">
+            <h2>Featured Project</h2>
+            <div class="project-card">
+                <h3>Interactive Portfolio Game</h3>
+                <p>Experience my skills through an interactive game environment.</p>
+                <a href="/game" class="cta-button">Try it out <i class="fas fa-gamepad"></i></a>
+            </div>
+        </section>
+
+        <section class="contact">
+            <h2>Get In Touch</h2>
+            <div class="contact-info">
+                <p><i class="fas fa-envelope"></i> your.email@example.com</p>
+                <p><i class="fas fa-location-dot"></i> Your Location</p>
+            </div>
         </section>
     </main>
+
+    <footer>
+        <p>&copy; 2025 Your Name. All rights reserved.</p>
+    </footer>
 </body>
 </html>
