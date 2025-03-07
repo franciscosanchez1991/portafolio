@@ -1,36 +1,43 @@
+import { GameObject } from "./Gameobjects.js";
 import { Vector2 } from "./Vector2.js";
 
-export class Sprite{
+export class Sprite extends GameObject{
     // this works mostly to sprites in a grid, so it can be used for animations
     constructor({
-        resource, // image source
-        frameSize, // size of each frame
-        hFrames, // number of horizontal frames
-        vFrames, // number of vertical frames
-        frame, // frame i want to show
-        scale, // scale of the sprite
-        position, // where to draw it
+        resource, // image we want to draw
+        frameSize, // size of the crop of the image
+        hFrames, // how the sprite arranged horizontally
+        vFrames, // how the sprite arranged vertically
+        frame, // which frame we want to show
+        scale, // how large to draw this image
+        position, // where to draw it (top left corner)
         animations,
-    }){
-        this.resource = resource;
-        this.frameSize = frameSize ?? new Vector2(16,16); // if frameSize is not defined, it will be 0,0
-        this.hFrames = hFrames ?? 1; // if hFrames is not defined, it will be 1
-        this.vFrames = vFrames ?? 1;
-        this.frame = frame ?? 0;
-        this.frameMap = new Map();
-        this.scale = scale ?? 1;
-        this.position = position ?? new Vector2(0,0);
-        this.animations = animations ?? null;
-        this.buildFrameMap();
+      }) {
+      super({
+        name
+      });
+      this.resource = resource;
+      this.frameSize = frameSize ?? new Vector2(16,16);
+      this.hFrames = hFrames ?? 1;
+      this.vFrames = vFrames ?? 1;
+      this.frame = frame ?? 0;
+      this.frameMap = new Map();
+      this.scale = scale ?? 1;
+      this.position = position ?? new Vector2(0,0);
+      this.animations = animations ?? null;
+      this.buildFrameMap();
     }
 
-    buildFrameMap(){
+    buildFrameMap() {
         let frameCount = 0;
-        for(let y = 0; y < this.vFrames; y++){
-            for(let x = 0; x < this.hFrames; x++){
-                this.frameMap.set(frameCount, new Vector2(this.frameSize.x *x, this.frameSize.x *y));
-                frameCount++;
-            }
+        for (let v=0; v<this.vFrames; v++) {
+          for (let h=0; h<this.hFrames; h++) {
+            this.frameMap.set(
+                frameCount,
+                new Vector2(this.frameSize.x * h, this.frameSize.y * v)
+            )
+            frameCount++;
+          }
         }
     }
 

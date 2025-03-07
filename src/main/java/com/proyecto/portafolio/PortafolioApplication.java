@@ -1,26 +1,33 @@
 package com.proyecto.portafolio;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.proyecto.portafolio.controllers.GameStateController;
 
 import jakarta.annotation.PostConstruct;
 
 @SpringBootApplication
 public class PortafolioApplication {
-    private volatile boolean running = true;
+    @Autowired
+    private GameStateController gameStateController;
 
     public static void main(String[] args) {
         SpringApplication.run(PortafolioApplication.class, args);
     }
 
     @PostConstruct
-    public void startGameLoop() {
+    public void startGameLoop() { // basically to start/stop the game and controll the fps
         Thread gameThread = new Thread(() -> {
-            while (running) {
-                updateGameLogic();
+            while (true) {
+                if (gameStateController.isGameRunning()) {
+                    updateGameLogic();
+                }
                 try {
-                    Thread.sleep(100); // Control del ciclo de actualización (10 FPS aprox)
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
+                    break;
                 }
             }
         });
@@ -30,10 +37,5 @@ public class PortafolioApplication {
 
     private void updateGameLogic() {
         System.out.println("Actualizando lógica del juego...");
-        // Aquí puedes actualizar el estado del juego, mover NPCs, etc.
-    }
-
-    public void stopGameLoop() {
-        running = false;
     }
 }
