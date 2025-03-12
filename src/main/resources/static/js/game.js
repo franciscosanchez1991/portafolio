@@ -65,23 +65,28 @@ const draw = () => {
     // Clear anything stale
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-    // Draw the sky
-    background.drawImage(ctx, 0, 0)
-  
     // Save the current state (for camera offset)
     ctx.save();
-
   
     // Draw objects in the mounted scene
     mainScene.draw(ctx, 0, 0);
-  
-    Header.drawImage(ctx, 0, 0);
-    resources.areAllImagesLoaded();
+      
+    //resources.areAllImagesLoaded();
     // Restore to original state
     ctx.restore();    
   
   }
   
+function waitForResources() {
+    if (resources.areAllImagesLoaded()) {
+        console.log('All resources loaded, starting game loop');
+        const gameLoop = new GameLoop(update, draw);
+        gameLoop.start();
+    } else {
+        console.log('Waiting for resources to load...');
+        setTimeout(waitForResources, 100);
+    }
+}
 
-const gameLoop = new GameLoop(update, draw);
-gameLoop.start();
+// Replace the direct gameLoop creation with:
+waitForResources();

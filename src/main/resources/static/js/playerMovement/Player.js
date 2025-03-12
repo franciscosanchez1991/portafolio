@@ -6,6 +6,7 @@ import { Animations} from "../Animations.js";
 import { events } from "../Events.js";
 import { isSpaceFree } from "../grid.js";
 import { moveTowards } from "../moveTowards.js";
+import { walls } from "../walls.js";
 import {DOWN, LEFT, RIGHT, UP} from "../Input.js";
 import {FrameIndexPattern} from "../FrameIndexPattern.js";
 import {    

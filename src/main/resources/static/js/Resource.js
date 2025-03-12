@@ -7,6 +7,7 @@ class Resources {
             moneda: "sprites/moneda8.png",
             character: "sprites/hero-sheet.png",
             wall: "sprites/pared.png",
+            shadow: "sprites/shadow.png",
         };
         this.images = {};
         this.loadedImages = 0;
@@ -22,8 +23,7 @@ class Resources {
             
             img.onload = () => { // once all images are loaded, the onload event will be triggered
                 this.images[key].isLoaded = true;
-                this.loadedImages++;
-                console.log(`Loaded image: ${key}`);
+                this.loadedImages++;                
             };
 
             img.onerror = () => { // if an image fails to load, the onerror event will be triggered
