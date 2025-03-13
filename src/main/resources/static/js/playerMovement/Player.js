@@ -6,6 +6,7 @@ import { Animations} from "../Animations.js";
 import { events } from "../Events.js";
 import { isSpaceFree } from "../grid.js";
 import { moveTowards } from "../moveTowards.js";
+import { walls } from "../walls.js";
 import {DOWN, LEFT, RIGHT, UP} from "../Input.js";
 import {FrameIndexPattern} from "../FrameIndexPattern.js";
 import {    
@@ -95,7 +96,7 @@ export class Character extends GameObject{
         const shadow = new Sprite({
             resource: resources.images.shadow,
             frameSize: new Vector2(32, 32),
-            position: new Vector2(0,0),
+            position: new Vector2(-8,-4),
         });
         this.addChild(shadow);
 
@@ -105,7 +106,7 @@ export class Character extends GameObject{
             hFrames: 3,
             vFrames: 8,
             frame: 1,
-            position: new Vector2(0,0),
+            position: new Vector2(-8,-4),
             animations: new Animations({
                 walkUp: new FrameIndexPattern(WALK_UP),        
                 walkDown: new FrameIndexPattern(WALK_DOWN),
@@ -141,7 +142,7 @@ export class Character extends GameObject{
     }
 
     tryEmitPosition() {
-        if (this.lastX === this.position.x && this.lastY === this.position.y) {
+        if (this.lastX === this.position.x && this.lastY === this.position.y) { // in case the character didint move
           return;
         }
         this.lastX = this.position.x;

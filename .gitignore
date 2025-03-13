@@ -34,3 +34,6 @@ build/
 
 ### txts ###
 codigo_sin_usar.txt
+
+### pdf ###
+.src/main/resources/static/downloads/

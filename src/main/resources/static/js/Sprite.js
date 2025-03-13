@@ -14,10 +14,10 @@ export class Sprite extends GameObject{
         animations,
       }) {
       super({
-        name
+        
       });
       this.resource = resource;
-      this.frameSize = frameSize ?? new Vector2(16,16);
+      this.frameSize = frameSize ?? new Vector2(16,16); //size of the image
       this.hFrames = hFrames ?? 1;
       this.vFrames = vFrames ?? 1;
       this.frame = frame ?? 0;
@@ -36,7 +36,7 @@ export class Sprite extends GameObject{
                 frameCount,
                 new Vector2(this.frameSize.x * h, this.frameSize.y * v)
             )
-            frameCount++;
+            frameCount++;            
           }
         }
     }
@@ -49,9 +49,14 @@ export class Sprite extends GameObject{
         this.frame = this.animations.frame;
       }
 
-    drawImage(ctx,x,y){
+    drawImage(ctx,x,y){      
         if (!this.resource.isLoaded) {
-            console.warn('Resource not loaded yet');
+            //console.warn('Resource not loaded yet'+ this.resource);
+            // console.log('Resource:', this.resource);
+            // console.log('Resource structure:', {
+            //     hasImage: !!this.resource.image,
+            //     hasIsLoaded: 'isLoaded' in this.resource
+            // });
             return;
         }
 
