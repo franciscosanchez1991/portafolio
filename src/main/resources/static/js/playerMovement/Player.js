@@ -96,7 +96,7 @@ export class Character extends GameObject{
         const shadow = new Sprite({
             resource: resources.images.shadow,
             frameSize: new Vector2(32, 32),
-            position: new Vector2(0,0),
+            position: new Vector2(-8,-4),
         });
         this.addChild(shadow);
 
@@ -106,7 +106,7 @@ export class Character extends GameObject{
             hFrames: 3,
             vFrames: 8,
             frame: 1,
-            position: new Vector2(0,0),
+            position: new Vector2(-8,-4),
             animations: new Animations({
                 walkUp: new FrameIndexPattern(WALK_UP),        
                 walkDown: new FrameIndexPattern(WALK_DOWN),

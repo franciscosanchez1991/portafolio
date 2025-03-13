@@ -28,12 +28,34 @@ const money = new Sprite({
 });
 mainScene.addChild(money);
 
-// shelf
-const shelf = new Sprite({
-    resource: resources.images.shelf,
-    frameSize: new Vector2(48, 48)
+// shelf section
+const shelfPositions = [
+    // Middle row
+    { x: 100, y: 97 },
+    { x: 130, y: 97 },
+    { x: 160, y: 97 },
+    { x: 190, y: 97 },
+    { x: 220, y: 97 },
+    { x: 250, y: 97 },
+    // Back row
+    { x: 84, y: 955 },
+    { x: 278, y: 955 },
+    { x: 471, y: 955 },
+    { x: 665, y: 955 },
+    { x: 855, y: 955 },
+    { x: 1045, y: 955 }
+];
+
+// Create shelves
+shelfPositions.forEach(pos => {
+    const shelf = new Sprite({
+        resource: resources.images.shelf,
+        frameSize: new Vector2(48, 48),
+        position: new Vector2(pos.x, pos.y)
+    });
+    mainScene.addChild(shelf);
 });
-mainScene.addChild(shelf);
+
 
 // header
 const Header = new Sprite({
@@ -50,7 +72,7 @@ const walls = new Sprite({
 mainScene.addChild(walls);
 
 // character
-const character = new Character(gridCells(6), gridCells(5));
+const character = new Character(gridCells(19), gridCells(4));
 mainScene.addChild(character);
 mainScene.input = new Input();
 
@@ -69,8 +91,7 @@ const draw = () => {
     ctx.save();
   
     // Draw objects in the mounted scene
-    mainScene.draw(ctx, 0, 0);
-      
+    mainScene.draw(ctx, 0, 0);    
     //resources.areAllImagesLoaded();
     // Restore to original state
     ctx.restore();    
