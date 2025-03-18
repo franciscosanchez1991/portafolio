@@ -1,7 +1,7 @@
 import { GameLoop } from "./Gameloop.js";
 import {resources} from "./Resource.js";
 import { Input } from "./Input.js";
-import { Sprite } from "./sprite.js";
+import { Sprite } from "./Sprite.js";
 import { Vector2 } from "./Vector2.js";
 import { gridCells } from "./grid.js";
 import { Character } from "../js/playerMovement/Player.js";
