@@ -16,7 +16,7 @@ function Game() {
     const initGame = async () => {
       try {
         // Import game modules dynamically
-        const { default: GameManager } = await import('./js/game.js')
+        //const { default: GameManager } = await import('./js/game.js')
         const { default: WebSocketManager } = await import('./js/websocket/WebSocketManager.js')
         
         // Initialize game with canvas context
