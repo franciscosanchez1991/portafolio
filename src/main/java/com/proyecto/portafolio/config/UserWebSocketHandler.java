@@ -7,11 +7,13 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+// la idea de este handler es manejar las conexiones de los usuarios
+
 @Component
 public class UserWebSocketHandler extends TextWebSocketHandler {
 
     private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>(); // permite almacenar las sesiones de los usuarios conectados
-    private int maxUsers = 10; // cantidad máxima de usuarios
+    private int maxUsers = 2; // cantidad máxima de usuarios
     
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception { // se ejecuta cuando un usuario se conecta

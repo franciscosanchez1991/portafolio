@@ -6,7 +6,6 @@ import { Vector2 } from "./Vector2.js";
 import { gridCells } from "./grid.js";
 import { Character } from "../js/playerMovement/Player.js";
 import { GameObject } from "./Gameobjects.js";
-
 const canvas = document.querySelector("#game-canvas");
 const ctx = canvas.getContext("2d");
 
@@ -76,11 +75,12 @@ const character = new Character(gridCells(19), gridCells(4));
 mainScene.addChild(character);
 mainScene.input = new Input();
 
+// Hide game elements initially
+mainScene.visible = false;
+
 const update = (delta) => {
     mainScene.stepEntry(delta, mainScene);
 };
-
-
 
 const draw = () => {
 

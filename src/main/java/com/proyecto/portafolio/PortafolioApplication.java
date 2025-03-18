@@ -36,6 +36,6 @@ public class PortafolioApplication {
     }
 
     private void updateGameLogic() {
-        System.out.println("Actualizando lógica del juego...");
+        //System.out.println("Actualizando lógica del juego...");
     }
 }

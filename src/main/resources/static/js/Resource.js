@@ -8,6 +8,7 @@ class Resources {
             character: "sprites/hero-sheet.png",
             wall: "sprites/pared.png",
             shadow: "sprites/shadow.png",
+            form: "sprites/referencia1.png",
         };
         this.images = {};
         this.loadedImages = 0;
