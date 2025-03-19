@@ -1,5 +1,5 @@
-import { GameObject } from "./Gameobjects.js";
-import { Vector2 } from "./Vector2.js";
+import { GameObject } from "../backend/Gameobjects.js";
+import { Vector2 } from "../backend/Vector2.js";
 
 export class Sprite extends GameObject{
     // this works mostly to sprites in a grid, so it can be used for animations

@@ -12,26 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class PageController {
-    @Autowired
-    private GameStateController gameStateController;
 
-    @GetMapping("/")
-    public String index() {
-        gameStateController.stopGame();
-        return "index";
-    }
-
-    @GetMapping("/game")
-    public String game() {
-        gameStateController.startGame();
-        return "pages/game";
-    }
-
-    @GetMapping("/about")
-    public String about() {
-        gameStateController.stopGame();
-        return "about";
-    }
     @GetMapping("/download/{filename}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String filename) {
         // Logic to retrieve the file from the storage location
