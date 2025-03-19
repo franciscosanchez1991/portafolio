@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function App() {
   return (
     <div className="app">
@@ -5,8 +7,8 @@ function App() {
         <div className="nav-content">
           <div className="logo">FS</div>
           <ul className="nav-links">
-            <li><a href="/" className="active">Home</a></li>
-            <li><a href="/game">Interactive Demo</a></li>
+            <li><Link to="/" className="active">Home</Link></li>
+            <li><Link to="/game">Interactive Demo</Link></li>
             <li><a href="/download/CV-computer_engineer.pdf">Download CV</a></li>
           </ul>
         </div>
@@ -73,9 +75,9 @@ function App() {
           <div className="project-card">
             <h3>Interactive Portfolio Game</h3>
             <p>Experience my skills through an interactive game environment.</p>
-            <a href="/game" className="cta-button">
+            <Link to="/game" className="cta-button">
               Try it out <i className="fas fa-gamepad"></i>
-            </a>
+            </Link>
           </div>
         </section>
 
