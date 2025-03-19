@@ -1,14 +1,14 @@
 import { GameObject } from "../Gameobjects.js";
-import { Vector2 } from "../Vector2.js";
+import { Vector2 } from "../backend/Vector2.js";
 import { Sprite } from "../sprite.js";
-import { resources } from "../Resource.js";
-import { Animations} from "../Animations.js";
-import { events } from "../Events.js";
-import { isSpaceFree } from "../grid.js";
+import { resources } from "../backend/Resource.js";
+import { Animations} from "../frontend/Animations.js";
+import { events } from "../backend/Events.js";
+import { isSpaceFree } from "../backend/grid.js";
 import { moveTowards } from "../moveTowards.js";
-import { walls } from "../walls.js";
-import {DOWN, LEFT, RIGHT, UP} from "../Input.js";
-import {FrameIndexPattern} from "../FrameIndexPattern.js";
+import { walls } from "../backend/walls.js";
+import {DOWN, LEFT, RIGHT, UP} from "../frontend/Input.js";
+import {FrameIndexPattern} from "../frontend/FrameIndexPattern.js";
 import {    
     STAND_DOWN,
     STAND_LEFT,

@@ -1,5 +1,5 @@
-import { Vector2 } from './Vector2.js';
-import { events } from './Events.js';
+import { Vector2 } from './backend/Vector2.js';
+import { events } from './backend/Events.js';
 
 export class GameObject {
     constructor({ position }){

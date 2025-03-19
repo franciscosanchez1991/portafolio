@@ -1,6 +1,8 @@
 package com.proyecto.portafolio.config;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -29,6 +31,21 @@ public class UserWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception { // se ejecuta cuando un usuario envía ejecuta una accion
         System.out.println("Mensaje recibido de " + session.getId() + ": " + message.getPayload());
         // Aquí procesas los mensajes (como la selección del personaje)
+        JSONObject jsonMessage = new JSONObject(message.getPayload());
+        String type = jsonMessage.getString("type");
+
+        switch (type) {
+            case "processData":
+                // Send message to trigger JS processing
+                session.sendMessage(new TextMessage("{\"type\": \"startProcessing\"}"));
+                break;
+            case "processedResults":
+                // Forward results to all connected React clients
+                for (WebSocketSession clientSession : sessions.values()) {
+                    clientSession.sendMessage(new TextMessage(message.getPayload()));
+                }
+                break;
+        }        
     }
 
     @Override

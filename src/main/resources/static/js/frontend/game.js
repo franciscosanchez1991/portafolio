@@ -1,10 +1,10 @@
 import { GameLoop } from "./Gameloop.js";
-import {resources} from "./Resource.js";
+import {resources} from "../backend/Resource.js";
 import { Input } from "./Input.js";
 import { Sprite } from "./sprite.js";
-import { Vector2 } from "./Vector2.js";
-import { gridCells } from "./grid.js";
-import { Character } from "../js/playerMovement/Player.js";
+import { Vector2 } from "../backend/Vector2.js";
+import { gridCells } from "../backend/grid.js";
+import { Character } from "../playerMovement/Player.js";
 import { GameObject } from "./Gameobjects.js";
 const canvas = document.querySelector("#game-canvas");
 const ctx = canvas.getContext("2d");
