@@ -11,6 +11,8 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.proyecto.portafolio.services.ResourceService;
+
 // la idea de este handler es manejar las conexiones de los usuarios
 @Component
 public class UserWebSocketHandler extends TextWebSocketHandler {
@@ -42,10 +44,34 @@ public class UserWebSocketHandler extends TextWebSocketHandler {
             JSONObject jsonMessage = new JSONObject(message.getPayload());
             String type = jsonMessage.getString("type");
 
+            // aqui voy a enviar los datos de resource, walls, grid
             switch (type) {
                 case "processData":
+                    ResourceService resourceService = new ResourceService();
+                    resourceService.loadResource("resource_character", "static/sprites/hero-sheet.png");
+                    resourceService.loadResource("resource_wall", "static/sprites/pared.png");
+                    resourceService.loadResource("resource_background", "static/sprites/suelo3_320x180.png");
+                    resourceService.loadResource("resource_shelf", "static/sprites/shelf.png");
+                    JSONObject response = new JSONObject()
+                        .put("type", "resourceData")
+                        .put("resources", new JSONObject()
+                            .put("character", resourceService.getEncodedResource("resource_character"))
+                            .put("wall", resourceService.getEncodedResource("resource_wall"))
+                            .put("background", resourceService.getEncodedResource("resource_background"))
+                            .put("shelf", resourceService.getEncodedResource("resource_shelf"))
+                        );
                     
+                    session.sendMessage(new TextMessage(response.toString()));                    
                     break;
+                
+                case "move":
+                    for (WebSocketSession clientSession : sessions.values()) {
+                        if (clientSession.isOpen()) {
+                            clientSession.sendMessage(new TextMessage(message.getPayload()));
+                        }
+                    }
+                    break;                    
+                
                 case "processedResults":
                     for (WebSocketSession clientSession : sessions.values()) {
                         if (clientSession.isOpen()) {
@@ -53,15 +79,21 @@ public class UserWebSocketHandler extends TextWebSocketHandler {
                         }
                     }
                     break;
-                case "ping":
-                    session.sendMessage(new TextMessage("{\"type\": \"pong\"}"));
-                    break;
+
             }
         } catch (Exception e) {
             logger.error("Error procesando mensaje: ", e);
             session.sendMessage(new TextMessage("{\"type\":\"error\",\"message\":\"" + e.getMessage() + "\"}"));
         }      
     }
+
+
+
+
+
+
+
+    
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         logger.error("Error de transporte para sesión " + session.getId(), exception);

@@ -98,6 +98,13 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- añadido -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.18.0</version>
+		</dependency>
+		<!-- añadido -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
