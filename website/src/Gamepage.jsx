@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import './css/game.css'
-
+import GameManager from './js/GameManager.js'
 function Game() {
   const canvasRef = useRef(null)
 
@@ -13,13 +13,11 @@ function Game() {
 
     // Initialize game
     const initGame = async () => {
-      try {        
-        const { default: WebSocketManager } = await import('./js/websocket/WebSocketManager.js')
-        
+      try {                      
+        const { wsManager } = await import('./js/websocket/WebSocketManager.js');
         // Initialize game with canvas context
         const ctx = canvas.getContext('2d')
-        // new GameManager(ctx)
-        // new WebSocketManager()
+        new GameManager(ctx)                
       } catch (error) {
         console.error('Failed to initialize game:', error)
       }

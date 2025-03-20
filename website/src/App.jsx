@@ -1,6 +1,22 @@
 import { Link } from 'react-router-dom'
 
 function App() {
+  const handleDownloadCV = async () => {
+    try {
+      // Create a blob URL for the PDF
+      const pdfUrl = '/CV-computer_engineer.pdf';
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.setAttribute('download', 'Francisco-Sanchez-CV.pdf');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Could not download CV. Please try again.');
+    }
+  };
+
   return (
     <div className="app">
       <nav className="navbar">
@@ -9,7 +25,7 @@ function App() {
           <ul className="nav-links">
             <li><Link to="/" className="active">Home</Link></li>
             <li><Link to="/game">Interactive Demo</Link></li>
-            <li><a href="/download/CV-computer_engineer.pdf">Download CV</a></li>
+            <li><button onClick={handleDownloadCV} className="download-link">Download CV</button></li>
           </ul>
         </div>
       </nav>
