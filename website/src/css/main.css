@@ -5,7 +5,20 @@
     --background-color: #f5f6fa;
     --accent-color: #e74c3c;
 }
+.download-link {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+    padding: 0;
+    text-decoration: none;
+}
 
+.download-link:hover {
+    color: var(--secondary-color);
+}
 * {
     margin: 0;
     padding: 0;
