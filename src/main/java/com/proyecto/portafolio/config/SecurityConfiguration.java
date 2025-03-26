@@ -14,7 +14,9 @@ public class SecurityConfiguration {
             .authorizeHttpRequests((authz) -> authz
                 .requestMatchers("/ws").permitAll()
                 .requestMatchers("/download").permitAll()
-                .anyRequest().authenticated()                
+                .requestMatchers("/admin/**").authenticated()
+                .anyRequest().permitAll()
+                                
             )
             .httpBasic(Customizer.withDefaults());
         return http.build();
