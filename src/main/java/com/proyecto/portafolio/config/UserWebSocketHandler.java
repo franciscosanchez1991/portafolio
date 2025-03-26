@@ -47,11 +47,14 @@ public class UserWebSocketHandler extends TextWebSocketHandler {
             // aqui voy a enviar los datos de resource, walls, grid
             switch (type) {
                 case "processData":
+                    // recursos
                     ResourceService resourceService = new ResourceService();
                     resourceService.loadResource("resource_character", "static/sprites/hero-sheet.png");
                     resourceService.loadResource("resource_wall", "static/sprites/pared.png");
                     resourceService.loadResource("resource_background", "static/sprites/suelo3_320x180.png");
                     resourceService.loadResource("resource_shelf", "static/sprites/shelf.png");
+                    resourceService.loadResource("resource_shadow", "static/sprites/shadow.png");
+                    // enviar datos
                     JSONObject response = new JSONObject()
                         .put("type", "resourceData")
                         .put("resources", new JSONObject()
@@ -59,12 +62,13 @@ public class UserWebSocketHandler extends TextWebSocketHandler {
                             .put("wall", resourceService.getEncodedResource("resource_wall"))
                             .put("background", resourceService.getEncodedResource("resource_background"))
                             .put("shelf", resourceService.getEncodedResource("resource_shelf"))
+                            .put("shadow", resourceService.getEncodedResource("resource_shadow"))
                         );
                     
                     session.sendMessage(new TextMessage(response.toString()));                    
                     break;
                 
-                case "move":
+                case "player_moves":
                     for (WebSocketSession clientSession : sessions.values()) {
                         if (clientSession.isOpen()) {
                             clientSession.sendMessage(new TextMessage(message.getPayload()));

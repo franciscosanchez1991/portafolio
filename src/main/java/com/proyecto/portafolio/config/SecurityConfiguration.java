@@ -13,6 +13,7 @@ public class SecurityConfiguration {
         http
             .authorizeHttpRequests((authz) -> authz
                 .requestMatchers("/ws").permitAll()
+                .requestMatchers("/download").permitAll()
                 .anyRequest().authenticated()                
             )
             .httpBasic(Customizer.withDefaults());
