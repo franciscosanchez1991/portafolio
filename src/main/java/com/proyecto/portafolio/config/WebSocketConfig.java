@@ -17,8 +17,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         // Registrar el handler en la ruta "/ws" y permitir origen localhost
         registry.addHandler(userWebSocketHandler(), "/ws")
-                .setAllowedOrigins("http://localhost:8080","http://localhost:5173");
-                //.setAllowedOriginPatterns("*");  // (Opcional: permitir cualquier origen en dev)
+                //.setAllowedOrigins("http://localhost:8080","http://localhost:5173");
+                .setAllowedOriginPatterns("*");  // (Opcional: permitir cualquier origen en dev)
     }
 
     // Definir el handler como bean para poder inyectarlo si es necesario
