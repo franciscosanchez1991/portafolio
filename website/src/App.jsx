@@ -1,55 +1,6 @@
 import { Link } from 'react-router-dom'
 
 function App() {
-  const handleDownloadCV = async () => {
-    try {
-      const response = await fetch('/CV-ingeniero_informatica.pdf');
-      
-      // Check if response is OK
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      // Verify content type
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/pdf')) {
-        throw new Error('Invalid content type! Expected PDF.');
-      }
-
-      // Check file size (5MB limit)
-      const contentLength = response.headers.get('content-length');
-      if (contentLength && parseInt(contentLength) > 5 * 1024 * 1024) {
-        throw new Error('File too large!');
-      }
-
-      const blob = await response.blob();
-      
-      // Verify blob type
-      if (blob.type !== 'application/pdf') {
-        throw new Error('Invalid file type!');
-      }
-
-      // Create secure URL
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'Francisco-Sanchez-CV.pdf');
-      
-      // Clean up after download
-      link.onclick = () => {
-        setTimeout(() => {
-          window.URL.revokeObjectURL(url);
-          link.remove();
-        }, 150);
-      };
-
-      document.body.appendChild(link);
-      link.click();
-    } catch (error) {
-      console.error('Download failed:', error);
-      alert('Could not download CV. Please try again.');
-    }
-  };
 
   return (
     <div className="app">
@@ -59,7 +10,7 @@ function App() {
           <ul className="nav-links">
             <li><Link to="/" className="active">Home</Link></li>
             <li><Link to="/game">Interactive Demo</Link></li>
-            <li><button onClick={handleDownloadCV} className="download-link">Download CV</button></li>
+            <li><a href="/download/CV-computer_engineer.pdf">Download CV</a></li>
           </ul>
         </div>
       </nav>

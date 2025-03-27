@@ -1,0 +1,1 @@
+export const backend = 'back-portafolio-584024812951.southamerica-west1.run.app';

@@ -1,12 +1,12 @@
 import { GameObject } from "../Gameobjects.js";
 import { Vector2 } from "../Vector2.js";
 import { Sprite } from "../Sprite.js";
-//import { resources } from "../Resource.js";
+import { resources } from "../Resource.js";
 import { Animations} from "../Animations.js";
 import { events } from "../Events.js";
-//import { isSpaceFree } from "../grid.js";
+import { isSpaceFree } from "../grid.js";
 import { moveTowards } from "./moveTowards.js";
-//import { walls } from "../walls.js";
+import { walls } from "../walls.js";
 import {DOWN, LEFT, RIGHT, UP} from "./Input.js";
 import {FrameIndexPattern} from "../FrameIndexPattern.js";
 import {    
@@ -19,79 +19,24 @@ import {
     WALK_RIGHT,
     WALK_UP
   } from "./playerAnimation.js";
-async function selectCharacter(userId, character) {
-    try {
-        const response = await axios.post('/user/select-character', { userId, character });
-        console.log(response.data);
-    } catch (error) {
-        console.error("Error al seleccionar el personaje:", error.response?.data || error.message);
-    }
-}
-
+import { wsManager } from "../websocket/WebSocketManager.js";
 export const left = 'left';
 export const right = 'right';
 export const up = 'up';
 export const down = 'down';
 
-
 export class Character extends GameObject{
-    // constructor(){
-
-    //     this.heldDirections = [];   
-
-    //     document.addEventListener('keydown', (e) => {
-    //         if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
-    //             this.onPress(left);
-    //         }
-    //         if (e.code === 'ArrowRight' || e.code === 'KeyD') {
-    //             this.onPress(right);
-    //         }
-    //         if (e.code === 'ArrowUp' || e.code === 'KeyW') {
-    //             this.onPress(up);
-    //         }
-    //         if (e.code === 'ArrowDown' || e.code === 'KeyS') {
-    //             this.onPress(down);
-    //         }
-
-    //     });
-    //     document.addEventListener('keyup', (e) => {
-    //         if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
-    //             this.onRelease(left);
-    //         }
-    //         if (e.code === 'ArrowRight' || e.code === 'KeyD') {
-    //             this.onRelease(right);
-    //         }
-    //         if (e.code === 'ArrowUp' || e.code === 'KeyW') {
-    //             this.onRelease(up);
-    //         }
-    //         if (e.code === 'ArrowDown' || e.code === 'KeyS') {
-    //             this.onRelease(down);
-    //         }
-    //     });
-    // }
-
-    // get direction(){
-    //     return this.heldDirections[0];
-    // }
-
-    // onPress(direction){
-    //     if (this.heldDirections.indexOf(direction) === -1) { // esto permite no añadir la misma dirección con las 2 teclas
-    //         this.heldDirections.unshift(direction);
-    //     }
-    // }
-    // onRelease(direction){
-    //     const index = this.heldDirections.indexOf(direction);
-    //     if (index === -1) {
-    //         return;            
-    //     }
-    //     // se soltó una dirección que no estaba en la lista 
-    //     this.heldDirections.splice(index, 1);
-    // }
 
     constructor(x,y){
         super({
             position: new Vector2(x,y)
         });
+
+        // Add input buffer
+        this.inputBuffer = [];
+        this.lastSentTime = 0;
+        this.bufferTimeout = 400; // envia los movimientos cada 400ms
+        this.maxBufferSize = 10; // maximo de movimientos en el buffer
 
         const shadow = new Sprite({
             resource: resources.images.shadow,
@@ -122,10 +67,37 @@ export class Character extends GameObject{
         this.facingDirection = down;
         this.destinationPosition = this.position.duplicate();
     }
+    bufferInput(direction, position) {
+        // se almacenan los movimientos en el buffer
+        this.inputBuffer.push({
+            direction,
+            x: position.x,
+            y: position.y,
+            timestamp: Date.now()
+        });
 
+        // si el buffer esta lleno o si ha pasado el tiempo de espera
+        if (this.inputBuffer.length >= this.maxBufferSize || 
+            Date.now() - this.lastSentTime > this.bufferTimeout) {
+            this.sendBufferedMoves();
+        }
+    }
+    sendBufferedMoves() {
+        if (this.inputBuffer.length === 0) return;
+
+        // enviar los movimientos al servidor
+        wsManager.socket.send(JSON.stringify({
+            type: "player_moves",
+            moves: this.inputBuffer
+        }));
+
+        // limpia el buffer
+        this.inputBuffer = [];
+        this.lastSentTime = Date.now();
+    }
     step(delta, root) {
 
-        // Lock movement if celebrating an item pickup
+        // si el jugador esta recogiendo un objeto
         if (this.itemPickupTime > 0) {
           this.workOnItemPickup(delta);
           return;
@@ -137,21 +109,33 @@ export class Character extends GameObject{
         if (hasArrived) {
           this.tryMove(root)
         }
-    
+        if (this.inputBuffer.length > 0 && 
+            Date.now() - this.lastSentTime > this.bufferTimeout) {
+            this.sendBufferedMoves();
+        }
         this.tryEmitPosition()
     }
 
     tryEmitPosition() {
-        if (this.lastX === this.position.x && this.lastY === this.position.y) { // in case the character didint move
-          return;
+        if (this.lastX === this.position.x && this.lastY === this.position.y) {
+            return;
         }
         this.lastX = this.position.x;
         this.lastY = this.position.y;
-        events.emit("HERO_POSITION", this.position)
-      }
+
+        // Buffer the move instead of directly emitting
+        this.bufferInput(this.facingDirection, {
+            x: this.position.x,
+            y: this.position.y
+        });
+
+        // Still emit local event for other game components
+        events.emit("HERO_POSITION", this.position);
+    }
 
     tryMove(root) {
         const {input} = root;
+        // se activan estas animaciones si el jugador esta quieto
         if (!input.direction) {
             if (this.facingDirection === DOWN) {
                 this.body.animations.play("standDown");
@@ -168,6 +152,7 @@ export class Character extends GameObject{
             return;
         }
     
+        // se activan estas animaciones si el jugador se esta moviendo
         let nextX = this.destinationPosition.x;
         let nextY = this.destinationPosition.y;
         const gridSize = 16;

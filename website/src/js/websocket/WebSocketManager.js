@@ -1,3 +1,5 @@
+import { resources } from '../Resource.js';
+import {backend} from './Routing.js';
 export class WebSocketManager {
     static instance = null;
     resources = {
@@ -8,7 +10,7 @@ export class WebSocketManager {
         if (WebSocketManager.instance) {
             return WebSocketManager.instance;
         }
-        this.socket = new WebSocket("ws://localhost:8080/ws");
+        this.socket = new WebSocket(`wss://${backend}/ws`);
         this.setupEventHandlers();
         WebSocketManager.instance = this;
     }
@@ -36,26 +38,20 @@ export class WebSocketManager {
             console.log("Message received:", event.data);
             const data = JSON.parse(event.data);
     
-            if (data.type === 'resourceData') {
-                // // Create Image objects from base64
-                // const characterImage = new Image();
-                // characterImage.src = data.resources.character;
-                
-                // const wallImage = new Image();
-                // wallImage.src = data.resources.wall;
-                
-                // // Wait for images to load
-                // Promise.all([
-                //     new Promise(resolve => characterImage.onload = resolve),
-                //     new Promise(resolve => wallImage.onload = resolve)
-                // ]).then(() => {
-                //     //console.log('All images loaded successfully');
-                //     // Use the images in your game
-                // });
-                this.loadResources(data.resources);
+            switch(data.type) {
+                case 'resourceData':
+                    resources.initializeFromWebSocket(data.resources);
+                    break;
+                case 'move_validation':
+                    // Handle server validation of moves
+                    if (!data.valid) {
+                        // Implement rubber-banding if server rejects move
+                        event.emit("MOVE_REJECTED", data.correctPosition);
+                    }
+                    break;
+                // ...other cases...
             }
         };
-
         this.socket.onclose = (event) => {
             console.log("WebSocket closed. Code:", event.code);
             
@@ -73,49 +69,49 @@ export class WebSocketManager {
             window.location.href = "/";
         };
     }
-    async loadResources(resourcesData) {
-        try {
+    // async loadResources(resourcesData) {
+    //     try {
 
-            ///////////// zona de modificacion de recursos //////////////            
-            const characterImage = new Image();
-            const wallImage = new Image();
-            const backgroundImage = new Image();
-            const shelfImage = new Image();
-            characterImage.src = resourcesData.character;
-            wallImage.src = resourcesData.wall;
-            backgroundImage.src = resourcesData.background;
-            shelfImage.src = resourcesData.shelf;
-            this.resources.images = {
-                character: {
-                    image: characterImage,
-                    isLoaded: true
-                },
-                wall: {
-                    image: wallImage,
-                    isLoaded: true
-                },
-                background: {
-                    image: backgroundImage,
-                    isLoaded: true
-                },
-                shelf: {
-                    image: shelfImage,
-                    isLoaded: true
-                }
-            };
-            //////////////////////////
-            this.resources.isLoaded = true;
-            console.log('All images loaded successfully');
+    //         ///////////// zona de modificacion de recursos //////////////            
+    //         const characterImage = new Image();
+    //         const wallImage = new Image();
+    //         const backgroundImage = new Image();
+    //         const shelfImage = new Image();
+    //         characterImage.src = resourcesData.character;
+    //         wallImage.src = resourcesData.wall;
+    //         backgroundImage.src = resourcesData.background;
+    //         shelfImage.src = resourcesData.shelf;
+    //         this.resources.images = {
+    //             character: {
+    //                 image: characterImage,
+    //                 isLoaded: true
+    //             },
+    //             wall: {
+    //                 image: wallImage,
+    //                 isLoaded: true
+    //             },
+    //             background: {
+    //                 image: backgroundImage,
+    //                 isLoaded: true
+    //             },
+    //             shelf: {
+    //                 image: shelfImage,
+    //                 isLoaded: true
+    //             }
+    //         };
+    //         //////////////////////////
+    //         this.resources.isLoaded = true;
+    //         console.log('All images loaded successfully');
             
-            // Dispatch event to notify game components
-            const event = new CustomEvent('resourcesLoaded', { 
-                detail: this.resources 
-            });
-            window.dispatchEvent(event);
-        } catch (error) {
-            console.error('Failed to load resources:', error);
-        }
-    }
+    //         // Dispatch event to notify game components
+    //         const event = new CustomEvent('resourcesLoaded', { 
+    //             detail: this.resources 
+    //         });
+    //         window.dispatchEvent(event);
+    //     } catch (error) {
+    //         console.error('Failed to load resources:', error);
+    //     }
+    // }
 
     getResources() {
         return this.resources;

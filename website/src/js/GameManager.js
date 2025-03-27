@@ -2,10 +2,9 @@ import { GameLoop } from "./Gameloop.js";
 import { Input } from "./playerMovement/Input.js";
 import { Sprite } from "./Sprite.js";
 import { Vector2 } from "./Vector2.js";
-//import { gridCells } from "./grid.js";
+import { gridCells } from "./grid.js";
 import { Character } from "./playerMovement/Player.js";
 import { GameObject } from "./Gameobjects.js";
-
 
 export default class GameManager {
     constructor(ctx) {
@@ -55,11 +54,11 @@ export default class GameManager {
             });
             this.mainScene.addChild(shelf);
         });
-
-        // // character
-        // const character = new Character(gridCells(19), gridCells(4));
-        // this.mainScene.addChild(character);
-        // this.mainScene.input = new Input();
+        
+        // character
+        const character = new Character(gridCells(19), gridCells(4));
+        this.mainScene.addChild(character);
+        this.mainScene.input = new Input();
 
         // Start game loop
         const gameLoop = new GameLoop(
