@@ -1,10 +1,13 @@
 package com.proyecto.portafolio.config;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -56,6 +59,7 @@ public class UserWebSocketHandler extends TextWebSocketHandler {
                     resourceService.loadResource("resource_shadow", "static/sprites/shadow.png");
                     // enviar datos
                     JSONObject response = new JSONObject()
+                        .put("id", session.getId())
                         .put("type", "resourceData")
                         .put("resources", new JSONObject()
                             .put("character", resourceService.getEncodedResource("resource_character"))
@@ -64,13 +68,17 @@ public class UserWebSocketHandler extends TextWebSocketHandler {
                             .put("shelf", resourceService.getEncodedResource("resource_shelf"))
                             .put("shadow", resourceService.getEncodedResource("resource_shadow"))
                         );
-                    
+                        for (WebSocketSession clientSession : sessions.values()) {
+                            if (clientSession.isOpen() && !clientSession.getId().equals(session.getId())) {
+                                clientSession.sendMessage(new TextMessage(message.getPayload()));
+                            }
+                        }
                     session.sendMessage(new TextMessage(response.toString()));                    
                     break;
                 
-                case "player_moves":
+                case "player_moves":                    
                     for (WebSocketSession clientSession : sessions.values()) {
-                        if (clientSession.isOpen()) {
+                        if (clientSession.isOpen() && !clientSession.getId().equals(session.getId())) {
                             clientSession.sendMessage(new TextMessage(message.getPayload()));
                         }
                     }
