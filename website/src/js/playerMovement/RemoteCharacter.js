@@ -1,4 +1,3 @@
-import { GameObject } from "../Gameobjects.js";
 import { Vector2 } from "../Vector2.js";
 import { Sprite } from "../Sprite.js";
 import { resources } from "../Resource.js";
@@ -7,7 +6,7 @@ import { events } from "../Events.js";
 import { isSpaceFree } from "../grid.js";
 import { moveTowards } from "./moveTowards.js";
 import { walls } from "../walls.js";
-import {DOWN, LEFT, RIGHT, UP} from "./Input.js";
+import {DOWN, LEFT, RIGHT, UP} from "./OutsiderInput.js";
 import {FrameIndexPattern} from "../FrameIndexPattern.js";
 import {    
     STAND_DOWN,
@@ -19,24 +18,18 @@ import {
     WALK_RIGHT,
     WALK_UP
   } from "./playerAnimation.js";
-import { wsManager } from "../websocket/WebSocketManager.js";
 export const left = 'left';
 export const right = 'right';
 export const up = 'up';
 export const down = 'down';
+import { GameObject } from "../Gameobjects.js";
 
-export class Character extends GameObject{
-
+export class RemoteCharacter extends GameObject{
     constructor(x,y){
         super({
             position: new Vector2(x,y)
         });
 
-        // Add input buffer
-        this.inputBuffer = [];
-        this.lastSentTime = 0;
-        this.bufferTimeout = 400; // envia los movimientos cada 400ms
-        this.maxBufferSize = 10; // maximo de movimientos en el buffer
 
         const shadow = new Sprite({
             resource: resources.images.shadow,
@@ -67,34 +60,7 @@ export class Character extends GameObject{
         this.facingDirection = down;
         this.destinationPosition = this.position.duplicate();
     }
-    bufferInput(direction, position) {
-        // se almacenan los movimientos en el buffer
-        this.inputBuffer.push({
-            direction,
-            x: position.x,
-            y: position.y,
-            timestamp: Date.now()
-        });
 
-        // si el buffer esta lleno o si ha pasado el tiempo de espera
-        if (this.inputBuffer.length >= this.maxBufferSize || 
-            Date.now() - this.lastSentTime > this.bufferTimeout) {
-            this.sendBufferedMoves();
-        }
-    }
-    sendBufferedMoves() {
-        if (this.inputBuffer.length === 0) return;
-
-        // enviar los movimientos al servidor
-        wsManager.socket.send(JSON.stringify({
-            type: "player_moves",
-            moves: this.inputBuffer
-        }));
-
-        // limpia el buffer
-        this.inputBuffer = [];
-        this.lastSentTime = Date.now();
-    }
     step(delta, root) {
 
         // si el jugador esta recogiendo un objeto
@@ -108,14 +74,9 @@ export class Character extends GameObject{
         // Attempt to move again if the hero is at his position
         if (hasArrived) {
           this.tryMove(root)
-        }
-        if (this.inputBuffer.length > 0 && 
-            Date.now() - this.lastSentTime > this.bufferTimeout) {
-            this.sendBufferedMoves();
-        }
+        }        
         this.tryEmitPosition()
     }
-
     tryEmitPosition() {
         if (this.lastX === this.position.x && this.lastY === this.position.y) {
             return;
@@ -124,15 +85,14 @@ export class Character extends GameObject{
         this.lastY = this.position.y;
 
         // Buffer the move instead of directly emitting
-        this.bufferInput(this.facingDirection, {
-            x: this.position.x,
-            y: this.position.y
-        });
+        // this.bufferInput(this.facingDirection, {
+        //     x: this.position.x,
+        //     y: this.position.y
+        // });
 
         // Still emit local event for other game components
         events.emit("HERO_POSITION", this.position);
     }
-
     tryMove(root) {
         const {input} = root;
         // se activan estas animaciones si el jugador esta quieto
@@ -179,5 +139,5 @@ export class Character extends GameObject{
             this.destinationPosition.x = nextX;
             this.destinationPosition.y = nextY;
         }
-    }    
+    } 
 }

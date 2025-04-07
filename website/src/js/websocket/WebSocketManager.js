@@ -6,15 +6,14 @@ export class WebSocketManager {
         images: {},
         isLoaded: false
     };
-    constructor() {
+    constructor() {        
         if (WebSocketManager.instance) {
             return WebSocketManager.instance;
         }
-        this.socket = new WebSocket(`wss://${backend}/ws`);
+        this.socket = new WebSocket(`${backend}`);
         this.setupEventHandlers();
         WebSocketManager.instance = this;
     }
-
     setupEventHandlers() {
         // para evitar crear multiples conexiones con un mismo usuario
         if (!this.socket.onopen) {
@@ -35,11 +34,16 @@ export class WebSocketManager {
         }
 
         this.socket.onmessage = (event) => {
-            console.log("Message received:", event.data);
-            const data = JSON.parse(event.data);
-    
+            //console.log("Message received:", event.data);
+            const data = JSON.parse(event.data);            
+            localStorage.setItem("id", data.id);
             switch(data.type) {
-                case 'resourceData':
+                case 'resourceData':                    
+                    const event = new CustomEvent('this_player', {
+                        detail: data.id
+                        
+                    });                    
+                    window.dispatchEvent(event);
                     resources.initializeFromWebSocket(data.resources);
                     break;
                 case 'move_validation':
@@ -47,9 +51,25 @@ export class WebSocketManager {
                     if (!data.valid) {
                         // Implement rubber-banding if server rejects move
                         event.emit("MOVE_REJECTED", data.correctPosition);
+                    }                    
+                    break;                
+                case 'player_moves':
+                    if (data.id !== localStorage.getItem("id")) {
+                        // Update other players' positions
+                        const event = new CustomEvent('player_moves', { 
+                            detail: data 
+                        });
+                        window.dispatchEvent(event);
+                    }
+                default:
+                    if (data.id !== localStorage.getItem("id")) {
+                        // Update other players' positions
+                        const event = new CustomEvent('new_player', { 
+                            detail: this 
+                        });
+                        window.dispatchEvent(event);
                     }
                     break;
-                // ...other cases...
             }
         };
         this.socket.onclose = (event) => {
@@ -60,7 +80,7 @@ export class WebSocketManager {
             } else {
                 alert("Conexión cerrada. Código: " + event.code);
             }
-            window.location.href = "/"; // o redirige a tu pantalla de login/menu principal
+            window.location.href = "/"; // redirige a tu pantalla de login/menu principal
         };
         
         this.socket.onerror = (error) => {
@@ -69,49 +89,6 @@ export class WebSocketManager {
             window.location.href = "/";
         };
     }
-    // async loadResources(resourcesData) {
-    //     try {
-
-    //         ///////////// zona de modificacion de recursos //////////////            
-    //         const characterImage = new Image();
-    //         const wallImage = new Image();
-    //         const backgroundImage = new Image();
-    //         const shelfImage = new Image();
-    //         characterImage.src = resourcesData.character;
-    //         wallImage.src = resourcesData.wall;
-    //         backgroundImage.src = resourcesData.background;
-    //         shelfImage.src = resourcesData.shelf;
-    //         this.resources.images = {
-    //             character: {
-    //                 image: characterImage,
-    //                 isLoaded: true
-    //             },
-    //             wall: {
-    //                 image: wallImage,
-    //                 isLoaded: true
-    //             },
-    //             background: {
-    //                 image: backgroundImage,
-    //                 isLoaded: true
-    //             },
-    //             shelf: {
-    //                 image: shelfImage,
-    //                 isLoaded: true
-    //             }
-    //         };
-    //         //////////////////////////
-    //         this.resources.isLoaded = true;
-    //         console.log('All images loaded successfully');
-            
-    //         // Dispatch event to notify game components
-    //         const event = new CustomEvent('resourcesLoaded', { 
-    //             detail: this.resources 
-    //         });
-    //         window.dispatchEvent(event);
-    //     } catch (error) {
-    //         console.error('Failed to load resources:', error);
-    //     }
-    // }
 
     getResources() {
         return this.resources;

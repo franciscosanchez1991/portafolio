@@ -3,12 +3,14 @@ import { Input } from "./playerMovement/Input.js";
 import { Sprite } from "./Sprite.js";
 import { Vector2 } from "./Vector2.js";
 import { gridCells } from "./grid.js";
-import { Character } from "./playerMovement/Player.js";
+import { Character } from "./playerMovement/Character.js";
 import { GameObject } from "./Gameobjects.js";
-
+import { RemoteCharacter } from "./playerMovement/RemoteCharacter.js";
+import { OutsiderInput } from "./playerMovement/OutsiderInput.js";
 export default class GameManager {
     constructor(ctx) {
         this.ctx = ctx;
+        this.players = {};
         this.mainScene = new GameObject({
             position: new Vector2(0,0)
         });
@@ -16,10 +18,12 @@ export default class GameManager {
         // Listen for resources loaded event
         window.addEventListener('resourcesLoaded', (event) => {
             const resources = event.detail;
-            console.log('Resources loaded:', resources);
+            //console.log('Resources loaded:', resources);
             this.initializeGameElements(resources);
         });
     }
+
+
 
     initializeGameElements(resources) {
         // background
@@ -55,10 +59,25 @@ export default class GameManager {
             this.mainScene.addChild(shelf);
         });
         
-        // character
-        const character = new Character(gridCells(19), gridCells(4));
-        this.mainScene.addChild(character);
-        this.mainScene.input = new Input();
+            
+
+        window.addEventListener('this_player', (event) => {                      
+            const local = new Character(gridCells(19), gridCells(4));    
+            this.mainScene.addChild(local);            
+            this.mainScene.input = new Input();  
+            const id = event.detail;
+            console.log('Player ID:', id);
+            this.players[id] = local; // Store the player in the players object
+            console.log("Player ID", players);
+        });
+
+        window.addEventListener('new_player', (event) => {
+            // character     
+            const remote = new RemoteCharacter(gridCells(19), gridCells(4));
+            this.mainScene.addChild(remote);  
+            const id = event.detail.id;
+            this.players[id] = remote; 
+        });
 
         // Start game loop
         const gameLoop = new GameLoop(
@@ -70,6 +89,8 @@ export default class GameManager {
 
     update(delta) {
         this.mainScene.stepEntry(delta, this.mainScene);
+
+
     }
 
     draw() {

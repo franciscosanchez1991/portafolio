@@ -82,6 +82,13 @@ function App() {
           </div>
         </section>
 
+        <section className="note">
+          <h2>Note</h2>
+          <p>            
+            This domain is temporary while I work on my personal website. This domain belongs to a group project I worked on last year.
+          </p>
+        </section>
+
         <section className="contact">
           <h2>Get In Touch</h2>
           <div className="contact-info">
